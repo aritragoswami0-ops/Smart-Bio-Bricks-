@@ -1,25 +1,13 @@
-name: smart_bio_bricks_app
-description: Smart Bio Bricks upgraded SIH app
-publish_to: "none"
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.18.0 <4.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.2
-  google_fonts: ^5.0.0
-  fl_chart: ^0.55.2
-  http: ^0.14.0
-  provider: ^6.0.5
-  smooth_page_indicator: ^1.0.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
-
-flutter:
-  uses-material-design: true
+workflows:
+  android-app:
+    name: Build Android APK
+    max_build_duration: 60
+    environment:
+      flutter: stable
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --debug
+    artifacts:
+      - build/app/outputs/flutter-apk/app-debug.apk
