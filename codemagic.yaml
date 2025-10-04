@@ -1,4 +1,3 @@
-
 workflows:
   android-app:
     name: Build Android APK (safe debug)
@@ -17,12 +16,10 @@ workflows:
             echo "Found pubspec.yaml"
           else
             echo "ERROR: pubspec.yaml not found in repository root." >&2
-            echo "Make sure pubspec.yaml is at the repo root (not inside a subfolder)." >&2
             exit 1
           fi
       - name: Ensure flutter native folders (create if missing)
         script: |
-          # If android/ios folders are missing, create full flutter project scaffolding
           if [ -d android ] || [ -d ios ]; then
             echo "Native folders appear present."
           else
@@ -30,10 +27,12 @@ workflows:
             flutter create .
           fi
       - name: Get Flutter packages
+        script: flutter pub get
+      - name: Accept Android SDK licenses
         script: |
-          flutter pub get
+          yes | flutter doctor --android-licenses || true
       - name: Build debug APK
-        script: |
-          flutter build apk --debug
+        script: flutter build apk --debug
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
+
